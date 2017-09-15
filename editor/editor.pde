@@ -136,9 +136,11 @@ void draw() {
   updatePixels();
   if (zoom > 0) {
     stroke(#FF0000);
+    int i = 0;
     for (Ant a : ants) {
-      fill(a.food>0? #333333 : #999999);
+      fill((frameCount%(addlogic? 20 : 40)<10 && cAntId==i)? #FF0000 : (a.food>0? #333333 : #999999));
       ellipse((a.x - px + .5)/zoom*width+width/2, (a.y - py + .5)/zoom*width+height/2, 8, 8);
+      i++;
     }
   }
   pmousePressed = mousePressed;

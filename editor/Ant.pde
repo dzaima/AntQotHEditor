@@ -73,6 +73,8 @@ class Ant {
     if (c == null) {
       println("didn't find for " + new View(view)+", learned" + learned);
       addlogic = true;
+      px = x+.5;
+      py = y+.5;
       throw new Pause();
     } else return c;
   }
