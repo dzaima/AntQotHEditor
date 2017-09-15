@@ -29,7 +29,7 @@ class Ant {
       }
     } else {
       if (res.type != 0) {
-        if (mget(xp, yp).ant!= null) /*ERR*/println("\ntype+ant on ant placed "+view);print(1/0);
+        if (mget(xp, yp).ant!= null) {/*ERR*/println("\ntype+ant on ant placed "+view);print(1/0);}
         Ant worker = new Ant(xp, yp, type, 0);
         ants.add(worker);
         set(xp, yp, worker);

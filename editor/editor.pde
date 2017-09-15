@@ -9,6 +9,9 @@ q - snap to the queen
 s - save as a JavaScript array
 m - switch to map editing mode (0 = place/remove food)
 
+LMB to go to/color a cell
+RMB to move camera
+MMB to place a worker
 
 */
 
@@ -103,7 +106,7 @@ void draw() {
       int res;
       if ((addlogic || mapEditMode) && !placedThisFrame && cx == mmx && cy == mmy) {
         res = mget(cx, cy).pcol(xsp, ysp, true);
-        if (mousePressed && (!pmousePressed || mapEditMode) && mouseButton == LEFT) {
+        if (mousePressed && (!pmousePressed || mapEditMode) && mouseButton != RIGHT) {
           if (addlogic) {
             Ant cant = ants.get(cAntId);
             int modPos = (cx - cant.x + 1) + 3 * (cy - cant.y+1);
@@ -115,7 +118,7 @@ void draw() {
             }
             addlogic = false;
           } else {
-            if (addMode == 0) {
+            if (addMode == 0 && mouseButton == LEFT) {
               if (mapEditAction == 0) mapEditAction = mget(cx, cy).food? 2 : 1;
               set(cx, cy, mapEditAction == 1);
             } else {
