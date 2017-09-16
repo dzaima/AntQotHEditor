@@ -54,6 +54,14 @@ class Ant {
           break;
         }
       }
+    } else if (type == 5) {
+      for (Cell c : getView(0)) {
+        if (c.ant != null && c.ant.type!=5 && c.ant.food>0) {
+          c.ant.food--;
+          food++;
+          break;
+        }
+      }
     }
   }
   Cell[] getView(int rot) {
