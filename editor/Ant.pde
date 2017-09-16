@@ -30,7 +30,9 @@ class Ant {
     } else {
       if (res.type != 0) {
         if (mget(xp, yp).ant!= null) {/*ERR*/println("\ntype+ant on ant placed "+view);print(1/0);}
-        Ant worker = new Ant(xp, yp, type, 0);
+        if (food < 1) {/*ERR*/println("\nnot enough food "+view);print(1/0);}
+        Ant worker = new Ant(xp, yp, res.type, 0);
+        food--;
         ants.add(worker);
         set(xp, yp, worker);
       } else {
@@ -41,6 +43,15 @@ class Ant {
             /*ERR*/println("\nworker wanted 2 food D:"+view);print(1/0);
           }
           food++;
+        }
+      }
+    }
+    if (type != 5 && food > 0) {
+      for (Cell c : getView(0)) {
+        if (c.ant != null && c.ant.type==5) {
+          c.ant.food++;
+          food--;
+          break;
         }
       }
     }
@@ -95,7 +106,7 @@ class Ant {
   boolean equals (Object o) {
     if (!(o instanceof Ant)) return false;
     Ant ao = (Ant)o;
-    if (ao.type==type && (type==5 || ao.food == food)) return true;
+    if (ao.type==type && ((type==5 && (ao.food>0) == (food>0)) || ao.food == food)) return true;
     else return false;
   }
   int idcode () {

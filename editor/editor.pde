@@ -70,7 +70,7 @@ final boolean globalIgnoreAnts = false;
 final boolean globalIgnoreFriend = false;
 final boolean globalIgnoreAntFood = false;
 
-final boolean globalIgnoreFood = true;
+final boolean globalIgnoreFood = false;
 final boolean globalIgnoreColor = false;
 
 int defaultMode = 1;
@@ -109,14 +109,16 @@ void draw() {
         if (mousePressed && (!pmousePressed || mapEditMode) && mouseButton != RIGHT) {
           if (addlogic) {
             Ant cant = ants.get(cAntId);
-            int modPos = (cx - cant.x + 1) + 3 * (cy - cant.y+1);
-            if (abs(cx - cant.x)<2 && abs(cy - cant.y)<2)
-            for (int i = 0; i < 4; i++) {
-              View toPut = new View(cant.getView(i));
-              println("learned", toPut);
-              learned.put(toPut, mouseButton==LEFT? new Call(allRots[i][modPos], addMode, 0) : new Call(allRots[i][modPos], 0, addMode));
+            if (cant.type==5 || mouseButton == LEFT) {
+              int modPos = (cx - cant.x + 1) + 3 * (cy - cant.y+1);
+              if (abs(cx - cant.x)<2 && abs(cy - cant.y)<2)
+              for (int i = 0; i < 4; i++) {
+                View toPut = new View(cant.getView(i));
+                learned.put(toPut, (mouseButton==LEFT)? new Call(allRots[i][modPos], addMode, 0) : new Call(allRots[i][modPos], 0, addMode));
+                //println("learned", toPut, "which is", learned.get(toPut));
+              }
+              addlogic = false;
             }
-            addlogic = false;
           } else {
             if (addMode == 0 && mouseButton == LEFT) {
               if (mapEditAction == 0) mapEditAction = mget(cx, cy).food? 2 : 1;
@@ -134,14 +136,22 @@ void draw() {
   }
   if (!placedThisFrame) mapEditAction = 0;
   updatePixels();
-  if (zoom > 0) {
-    stroke(#FF0000);
-    int i = 0;
-    for (Ant a : ants) {
-      fill((frameCount%(addlogic? 20 : 40)<10 && cAntId==i)? #FF0000 : (a.food>0? #333333 : #999999));
-      ellipse((a.x - px + .5)/zoom*width+width/2, (a.y - py + .5)/zoom*width+height/2, 8, 8);
-      i++;
-    }
+  int ia = 0;
+  float antZoom = max(8, width/zoom*2/3);
+  strokeWeight(antZoom/8);
+  for (Ant a : ants) {
+    float x = (a.x - px + .5)/zoom*width+width/2;
+    float y = (a.y - py + .5)/zoom*width+height/2;
+    
+    noStroke();
+    fill(#555555);
+    ellipse(x, y, antZoom, antZoom);
+    
+    stroke(colors[a.type]);
+    fill((frameCount%(addlogic? 20 : 40)<10 && cAntId==ia)? #FF0000 : (a.food>0? #333333 : #999999));
+    ellipse(x, y, antZoom*.8, antZoom*.8);
+    
+    ia++;
   }
   pmousePressed = mousePressed;
   //println(px, py);
@@ -158,7 +168,9 @@ void draw() {
   if (mapEditMode) {
     
   }
-  println(learned.size(), speed, ants.get(0).y, ants.get(0).food, stepCount, moveCount, frameRate, zoom);
+  println("learned", learned.size(), frameRate, zoom);
+  println("queen x:"+ ants.get(0).x +" y:"+ ants.get(0).y +" food:"+ants.get(0).food);
+  println("speed", speed, "step/move count", stepCount, moveCount);
 }
 void keyPressed() {
   if (key == ' ') playing = !playing;
