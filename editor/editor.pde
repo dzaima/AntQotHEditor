@@ -168,7 +168,7 @@ void draw() {
   if (mapEditMode) {
     
   }
-  println("learned", learned.size(), frameRate, zoom);
+  println("learned", learned.size(), frameRate, zoom, "ants", ants.size());
   println("queen x:"+ ants.get(0).x +" y:"+ ants.get(0).y +" food:"+ants.get(0).food);
   println("speed", speed, "step/move count", stepCount, moveCount);
 }
